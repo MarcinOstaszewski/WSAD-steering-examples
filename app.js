@@ -1,8 +1,8 @@
 window.addEventListener("DOMContentLoaded", function () {
 
     let size = 40;
-    let change = 3;
-    let veloChg = 0.4;
+    let change = 4;
+    let veloChg = 0.3;
     let maxRotChg = 4;
     let pressed = {};
     let veloH = 0;
@@ -14,26 +14,41 @@ window.addEventListener("DOMContentLoaded", function () {
     let wIW = window.innerWidth;
     let wIH = window.innerHeight;
     let ship = document.getElementById('ship');
-    let interval;
+    let interval, int;
     let frameLength = 16;
     let indicator = document.getElementById('indicator');
 
     let switches = document.querySelectorAll('.switchSteering');
-    switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e); console.log(e) }});
-
+    switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e);}});
 
     ship.style.top =  (wIH / 2 ) + "px";
     ship.style.left = (wIW / 2) + "px";
     ship.style.width = size + "px";
     ship.style.height = size + "px";
 
+    removeRotation = (sign) => {
+        if (Math.abs(rotation) > 14) {
+            console.log(rotation, sign, Math.abs(rotation) > 10)
+            int = setTimeout(function(){rotation = rotation - (10 * sign); removeRotation(sign)}, frameLength);
+        } else {
+            window.clearTimeout(int);
+            rotation = 0;
+        }
+        ship.style.transform = "rotate(" + rotation + "deg)";
+    }
+
     function switchSteering(e) {
-        clearInterval(interval)
+        window.clearInterval(interval);
+        switches.forEach( elem => {
+            elem.classList.remove('active');
+        })
+        document.getElementById(e.currentTarget.id).classList.add('active');
         switch (e.currentTarget.id) {
             case "Tank":
                 interval = window.setInterval(moveTank, frameLength);
                 break;
             case "SpaceShip":
+                if (rotation != 0) { removeRotation(Math.sign(rotation))}
                 interval = window.setInterval(moveSpaceShip, frameLength);
                 break;
             case "Turtle":
@@ -41,7 +56,7 @@ window.addEventListener("DOMContentLoaded", function () {
                 break;
         }
     }
-    interval = window.setInterval(moveTank, frameLength);
+    
     function moveTank() {
         let keys = Object.keys(pressed);
         let top = Number(ship.style.top.slice(0, -2));
@@ -87,7 +102,9 @@ window.addEventListener("DOMContentLoaded", function () {
         ship.style.top = (top + veloH) + "px";
         ship.style.left = (left + veloV) + "px";
         rotation += chgRotation;
-        indicator.innerText = veloV.toFixed(2) + " " + veloH.toFixed(2);
+        rotation = rotation % 360;
+        if (rotation < -180) { rotation = rotation + 360 }
+        indicator.innerText = rotation.toFixed(0);
         ship.style.transform = "rotate(" + rotation + "deg)";
     }
 
