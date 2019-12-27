@@ -11,8 +11,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let degToRadians = Math.PI / 180;
     let chgRotation = 0;
     let delay = 0;
-    let wIW = window.innerWidth;
-    let wIH = window.innerHeight;
+    let wIW, wIH;
     let ship = document.getElementById('ship');
     let interval, int;
     let frameLength = 16;
@@ -21,14 +20,11 @@ window.addEventListener("DOMContentLoaded", function () {
     let switches = document.querySelectorAll('.switchSteering');
     switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e);}});
 
-    ship.style.top =  (wIH / 2 ) + "px";
-    ship.style.left = (wIW / 2) + "px";
     ship.style.width = size + "px";
     ship.style.height = size + "px";
 
     removeRotation = (sign) => {
-        if (Math.abs(rotation) > 14) {
-            console.log(rotation, sign, Math.abs(rotation) > 10)
+        if (Math.abs(rotation) > 5) {
             int = setTimeout(function(){rotation = rotation - (10 * sign); removeRotation(sign)}, frameLength);
         } else {
             window.clearTimeout(int);
@@ -139,4 +135,12 @@ window.addEventListener("DOMContentLoaded", function () {
         pressed[e.key] = 1;
     }
 
+    function changeScreenSize() {
+        wIW = window.innerWidth;
+        wIH = window.innerHeight;
+    }
+    window.onresize = function(){changeScreenSize()}
+    changeScreenSize()
+    ship.style.top = (wIH / 2) + "px";
+    ship.style.left = (wIW / 2) + "px";
 });
