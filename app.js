@@ -95,12 +95,16 @@ window.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+        if (top + veloH > wIH - size) {veloH *= -0.7;}
+        if (left + veloV > wIW - size) {veloV *= -0.7;}
+        if (top + veloH < 0) { veloH *= -0.7;}
+        if (left + veloV < 0) { veloV *= -0.7;}
         ship.style.top = (top + veloH) + "px";
         ship.style.left = (left + veloV) + "px";
         rotation += chgRotation;
         rotation = rotation % 360;
         if (rotation < -180) { rotation = rotation + 360 }
-        indicator.innerText = rotation.toFixed(0);
+        indicator.innerText = (top.toFixed(0) + " " + veloH.toFixed(0));
         ship.style.transform = "rotate(" + rotation + "deg)";
     }
 
