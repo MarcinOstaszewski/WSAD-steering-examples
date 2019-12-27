@@ -20,6 +20,25 @@ body {
     border-radius: 22px 22px 9px 9px;
     background-color: #666;
 }
+#ship::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    height: 20px;
+    width: 6px;
+    margin-left:-3px;
+    background-color: rgb(200, 200, 100);
+}
+#ship::after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    background-color: rgb(120, 70, 70);
+    margin-left: 10%;
+    width: 80%;
+    height: 5px;
+}
 #switch {
     display: flex;
     flex-flow: row nowrap;
