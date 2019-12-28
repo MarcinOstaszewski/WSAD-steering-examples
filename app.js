@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let veloH = 0;
     let veloV = 0;
     let rotation = 0;
+    let bounceFactor = -0.33;
     let degToRadians = Math.PI / 180;
     let chgRotation = 0;
     let delay = 0;
@@ -20,12 +21,9 @@ window.addEventListener("DOMContentLoaded", function () {
     let switches = document.querySelectorAll('.switchSteering');
     switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e);}});
 
-    ship.style.width = size + "px";
-    ship.style.height = size + "px";
-
     removeRotation = (sign) => {
         if (Math.abs(rotation) > 5) {
-            int = setTimeout(function(){rotation = rotation - (10 * sign); removeRotation(sign)}, frameLength);
+            int = setTimeout(function(){rotation = rotation - (4 * sign); removeRotation(sign)}, frameLength);
         } else {
             window.clearTimeout(int);
             rotation = 0;
@@ -39,16 +37,20 @@ window.addEventListener("DOMContentLoaded", function () {
             elem.classList.remove('active');
         })
         document.getElementById(e.currentTarget.id).classList.add('active');
+        veloH = 0; veloV = 0;
         switch (e.currentTarget.id) {
             case "Tank":
                 interval = window.setInterval(moveTank, frameLength);
+                ship.classList = "tank";
                 break;
             case "SpaceShip":
                 if (rotation != 0) { removeRotation(Math.sign(rotation))}
-                interval = window.setInterval(moveSpaceShip, frameLength);
+                    interval = window.setInterval(moveSpaceShip, frameLength);
+                    ship.classList = "ship";
                 break;
             case "Turtle":
                 interval = window.setInterval(moveTurtle, frameLength);
+                ship.classList = "turtle";
                 break;
         }
     }
@@ -95,16 +97,16 @@ window.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        if (top + veloH > wIH - size) {veloH *= -0.7;}
-        if (left + veloV > wIW - size) {veloV *= -0.7;}
-        if (top + veloH < 0) { veloH *= -0.7;}
-        if (left + veloV < 0) { veloV *= -0.7;}
+        if (top + veloH > wIH - size) {veloH *= bounceFactor;}
+        if (left + veloV > wIW - size) {veloV *= bounceFactor;}
+        if (top + veloH < 0) { veloH *= bounceFactor;}
+        if (left + veloV < 0) { veloV *= bounceFactor;}
         ship.style.top = (top + veloH) + "px";
         ship.style.left = (left + veloV) + "px";
         rotation += chgRotation;
         rotation = rotation % 360;
         if (rotation < -180) { rotation = rotation + 360 }
-        indicator.innerText = (top.toFixed(0) + " " + veloH.toFixed(0));
+        indicator.innerText = (rotation.toFixed(0) + " " + veloH.toFixed(0));
         ship.style.transform = "rotate(" + rotation + "deg)";
     }
 
@@ -131,7 +133,11 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     let moveTurtle = () => { 
-        delay == 0 ? delay = 60 : delay--;
+        if (delay == 0) {
+            delay = 60
+        } else {
+            delay--
+        }
     }
 
     document.onkeyup = (e) => { delete pressed[e.key]; }
