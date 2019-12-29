@@ -16,9 +16,9 @@ window.addEventListener("DOMContentLoaded", function () {
     let interval, bulletInterval, timesLeft, int, delayA=0, delayD=0, delaySpace=0, gradualChgD=0, gradualChgA=0;
     let frameLength = 16;
     let indicator = document.getElementById('indicator');
-    console.log(indicator.innerText);
     let switches = document.querySelectorAll('.switchSteering');
     let bullet = document.getElementById('bullet');
+    let changer;
     let flapLeft, flapRight, rearRight, rearLeft, head; // animated Turtle parts
     switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e);}});
 
@@ -265,6 +265,19 @@ window.addEventListener("DOMContentLoaded", function () {
     }
     window.onresize = function(){changeScreenSize()}
     changeScreenSize()
+
+    placeShipChange = () => {
+        let x = Math.random() * wIW;
+        let y = Math.random() * wIH;
+        changer = document.createElement('div')
+        changer.id = 'changer';
+        console.log(changer);
+        ship.insertAdjacentElement('beforebegin', changer)
+        changer.style.top = y + "px";
+        changer.style.left = x + "px";
+    }
+    placeShipChange();
+
     ship.style.top = (wIH / 2) + "px";
     ship.style.left = (wIW / 2) + "px";
 });
