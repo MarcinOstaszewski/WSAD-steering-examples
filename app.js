@@ -11,13 +11,14 @@ window.addEventListener("DOMContentLoaded", function () {
     let bounceFactor = -0.33;
     let degToRadians = Math.PI / 180;
     let chgRotation = 0;
-    let delay = 0;
     let wIW, wIH;
     let ship = document.getElementById('ship');
-    let interval, int, delayA=0, delayD=0, gradualChgD=0, gradualChgA=0;
+    let interval, bulletInterval, timesLeft, int, delayA=0, delayD=0, delaySpace=0, gradualChgD=0, gradualChgA=0;
     let frameLength = 16;
     let indicator = document.getElementById('indicator');
+    console.log(indicator.innerText);
     let switches = document.querySelectorAll('.switchSteering');
+    let bullet = document.getElementById('bullet');
     let flapLeft, flapRight, rearRight, rearLeft, head; // animated Turtle parts
     switches.forEach( swi => {swi.onclick = (e) => {switchSteering(e);}});
 
@@ -72,12 +73,12 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     function verifyVelocityRotation() {
-        if (Math.abs(veloV) > 0.1) {
+        if (Math.abs(veloV) > 0.01) {
             veloV = veloV * 0.97;
         } else {
             veloV = 0;
         }
-        if (Math.abs(veloH) > 0.1) {
+        if (Math.abs(veloH) > 0.01) {
             veloH = veloH * 0.97;
         } else {
             veloH = 0;
@@ -101,6 +102,34 @@ window.addEventListener("DOMContentLoaded", function () {
         ship.style.transform = "rotate(" + rotation + "deg)";
     }
 
+    function moveBullet(bulletHspeed, bulletVspeed) {
+        if (timesLeft > 0) {
+            timesLeft--;
+            let x = Number(bullet.style.left.slice(0, -2));
+            let y = Number(bullet.style.top.slice(0,-2));
+            console.log(bulletHspeed.toFixed(1), bulletVspeed.toFixed(1),timesLeft );
+            bullet.style.left = x + bulletVspeed/2.5 + "px";
+            bullet.style.top = y + bulletHspeed/2.5 + "px";
+            if (timesLeft == 1) {
+                bullet.classList = "explosion";
+            }
+        } else {
+            window.clearInterval(bulletInterval);
+        }
+    }
+
+    function shootBullet(top, left) {
+        let bulletHspeed = -28 * Math.cos(rotation * degToRadians);
+        let bulletVspeed = 28 * Math.sin(rotation * degToRadians);
+        bullet.style.top = (top + 14 + bulletHspeed) + "px";
+        bullet.style.left = (left + 14 + bulletVspeed) + "px";
+        bullet.style.transform = "rotate(" + rotation + "deg)";
+        bullet.classList = 'bullet';
+        window.clearInterval(bulletInterval);
+        timesLeft = 60;
+        bulletInterval = window.setInterval(moveBullet.bind(null,bulletHspeed, bulletVspeed), frameLength)
+    }
+
     function moveTank() {
         let keys = Object.keys(pressed);
         let top = Number(ship.style.top.slice(0, -2));
@@ -114,12 +143,20 @@ window.addEventListener("DOMContentLoaded", function () {
             veloH += veloChg * Math.cos(rotation * degToRadians);
             veloV -= veloChg * Math.sin(rotation * degToRadians);
         }
-
         if (keys.includes("a")) {
             chgRotation -= 1;
         }
         if (keys.includes("d")) {
             chgRotation += 1;
+        }
+        if (delaySpace == 0) {
+            bullet.classList = "";
+            if (keys.includes(" ")) {
+                shootBullet(top, left);
+                delaySpace = 60;    
+            }
+        } else {
+            delaySpace--;
         }
         
         verifyVelocityRotation();
@@ -128,7 +165,7 @@ window.addEventListener("DOMContentLoaded", function () {
         rotation += chgRotation;
         setShipRotation()
        
-        indicator.innerText = (rotation.toFixed(0) + " __ " + veloH.toFixed(2));
+        indicator.innerText = (top.toFixed(1) + " __ " + left.toFixed(1));
     }
 
     function moveSpaceShip() {
@@ -215,7 +252,6 @@ window.addEventListener("DOMContentLoaded", function () {
         setShipRotation();        
         
         indicator.innerText = (rearRight.style.transform + ' __ ' + flapRight.style.transform );
-            // veloH.toFixed(2) + " __ " + gradualChgD.toFixed(2));
     }
 
     document.onkeyup = (e) => { delete pressed[e.key]; }
