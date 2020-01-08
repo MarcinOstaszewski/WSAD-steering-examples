@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let ship = document.getElementById('ship');
     let interval, bulletInterval, timesLeft, int, delayA=0, delayD=0, delaySpace=0, gradualChgD=0, gradualChgA=0;
     let frameLength = 16;
-    let indicator = document.getElementById('indicator');
+    // let indicator = document.getElementById('indicator');
     let switches = document.querySelectorAll('.switchSteering');
     let bullet = document.getElementById('bullet');
     let changer;
@@ -164,8 +164,6 @@ window.addEventListener("DOMContentLoaded", function () {
         moveShipWithVelo(top, left);
         rotation += chgRotation;
         setShipRotation()
-       
-        indicator.innerText = (top.toFixed(1) + " __ " + left.toFixed(1));
     }
 
     function moveSpaceShip() {
@@ -250,8 +248,6 @@ window.addEventListener("DOMContentLoaded", function () {
         verifyBounce(top, left);
         moveShipWithVelo(top, left);
         setShipRotation();        
-        
-        indicator.innerText = (rearRight.style.transform + ' __ ' + flapRight.style.transform );
     }
 
     document.onkeyup = (e) => { delete pressed[e.key]; }
@@ -276,7 +272,7 @@ window.addEventListener("DOMContentLoaded", function () {
         changer.style.top = y + "px";
         changer.style.left = x + "px";
     }
-    placeShipChange();
+    // placeShipChange();
 
     ship.style.top = (wIH / 2) + "px";
     ship.style.left = (wIW / 2) + "px";
