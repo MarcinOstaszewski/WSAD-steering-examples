@@ -234,7 +234,7 @@ body {
     top: 10px;
     right: 10px;
     padding: 2px;
-    background-color: rgb(97, 93, 107);
+    background-color: rgba(227, 221, 240, 20%);
 }
 #switch div {
     text-align: center;
@@ -243,22 +243,22 @@ body {
     width: 60px;
     margin: 5px;
     padding: 5px 2px;
-    background-color: lightblue;
+    background-color: #add8e633;
     cursor: pointer;
     box-sizing: border-box;
 }
 #switch div.active {
-    background-color: #1993bb;
-    color: #fff;
+    background-color: #1993bb33;
+    color: #ffffff55;
     font-weight: 700;
-    border-bottom: 2px solid #115575;
+    border-bottom: 2px solid #add8e622;
     box-sizing: border-box;
 }
 #info {
     position: fixed;
-    top: 45px;
+    top: 47px;
     right: 10px;
-    color: #ccc;
+    color: #cccccc55;
 }
 #indicator {
     position: fixed;
@@ -267,9 +267,34 @@ body {
     font-size: 20px;
     color: #fff;
 }
-#changer {
+#collectable {
     position: fixed;
-    height: 10px;
-    width: 10px;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: center;
+    /* background-color: greenyellow; */
+}
+
+/* #pointer {
+    position: fixed ;
+    width: 2px;
+    height: 2px;
     background-color: white;
+} */
+
+#score {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 200px;
+    height: 50px;
+    color: #eeeeee55;
+    font-size: 16px;
+}
+#points-display {
+    color: #ffffff55;
+    font-size: 20px;
 }
